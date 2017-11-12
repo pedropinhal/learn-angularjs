@@ -1,0 +1,39 @@
+<h2>{{pageTitle}}</h2>
+<form name="filter">
+  <div class="form-group">
+    <input type="text" [(ngModel)]='listFilter' name="filter" class="form-control" placeholder="Filter by">
+  </div>
+  <label>Filtered by: {{listFilter}}</label>
+</form>
+<table class="table" *ngIf='products && products.length'>
+  <thead>
+    <tr>
+      <th>
+        <button type="button" (click)='toggleImage()' class="btn btn-primary">
+          {{showImage? 'Hide':'Show'}} Images
+        </button>
+      </th>
+      <th>Product</th>
+      <th>Code</th>
+      <th>Available</th>
+      <th>Price</th>
+      <th>5 Star Rating</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor='let product of filteredProducts'>
+      <th scope="row">
+        <img *ngIf='showImage' [src]='product.imageUrl' [width]=50 [title]='product.productName' />
+      </th>
+      <td><a [routerLink]="['/product', product.productId]">{{product.productName}}</a></td>
+      <td>{{product.productCode | lowercase | convertToSpaces: '-'}}</td>
+      <td>{{product.releaseDate}}</td>
+      <td>{{product.price | currency:'GBP':true:'1.2-2'}}</td>
+      <td>
+        <pm-star [rating]='product.starRating'
+        (ratingClicked)='onRatingClicked($event)'></pm-star>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
